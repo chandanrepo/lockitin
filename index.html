@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b1c">
+<title>Lock It In — Spain vs Argentina · World Cup Final Prediction Cards</title>
+<meta name="description" content="Pick your score for the Spain vs Argentina World Cup final, get a timestamped prediction card, and share it before kickoff. Free, no login, nothing stored.">
+<meta property="og:title" content="🔒 Lock It In — Spain vs Argentina Final">
+<meta property="og:description" content="Get a timestamped prediction card before kickoff. Receipts for your gloating later. 10 seconds, no login.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080b1c;color:#eef2ff;font-family:-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:520px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:42px;margin:16px 0 4px;letter-spacing:1px;text-align:center}
+.sub{text-align:center;color:#8fa2d9;letter-spacing:3px;font-weight:700;font-size:13px;margin:0}
+.count{text-align:center;color:#ffd76a;font-weight:700;margin:10px 0 18px;font-size:15px;min-height:20px}
+.panel{background:#0e1430;border:1px solid #1d2750;border-radius:16px;padding:16px;display:grid;gap:14px}
+label{display:grid;gap:6px;font-size:13px;color:#9fb0dd;font-weight:600}
+input[type=text]{background:#0a0f24;border:1px solid #263266;border-radius:10px;color:#fff;padding:12px;font-size:16px;width:100%}
+.scores{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px}
+.team{display:grid;justify-items:center;gap:8px}
+.flagc{width:64px;height:42px;border-radius:8px;border:1px solid rgba(255,255,255,.25)}
+.flag-esp{background:linear-gradient(180deg,#AA151B 25%,#F1BF00 25%,#F1BF00 75%,#AA151B 75%)}
+.flag-arg{background:linear-gradient(180deg,#74ACDF 33%,#fff 33%,#fff 66%,#74ACDF 66%)}
+.tname{font-size:12px;letter-spacing:2px;color:#c7d2f0;font-weight:700}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{width:44px;height:44px;border-radius:12px;border:1px solid #2a3a7a;background:#141c3f;color:#fff;font-size:22px}
+.stepper span{font-size:34px;font-weight:900;min-width:34px;text-align:center}
+.vs{font-size:26px;color:#54608f;font-weight:900;padding-top:46px}
+.pens{display:grid;gap:8px;font-size:13px;color:#ffd76a;font-weight:600;text-align:center}
+.seg{display:flex;gap:8px;justify-content:center}
+.seg button{padding:10px 14px;border-radius:999px;border:1px solid #2a3a7a;background:#141c3f;color:#c7d2f0;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+.seg button.on{background:#22306b;border-color:#5b6fd6;color:#fff}
+.chipflag{display:inline-block;width:22px;height:15px;border-radius:3px}
+.row2{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.chk{display:flex;flex-direction:row;align-items:center;gap:8px;color:#c7d2f0;font-size:13px;font-weight:600}
+canvas{width:100%;height:auto;border-radius:18px;margin:18px 0 12px;border:1px solid #1d2750;display:block;background:#0b1026}
+.actions{display:grid;gap:10px}
+.btn{padding:15px;border-radius:14px;border:1px solid #2a3a7a;background:#141c3f;color:#fff;font-size:16px;font-weight:800}
+.btn.primary{background:#3b5bfd;border-color:#3b5bfd}
+.btn.green{background:#1da851;border-color:#1da851}
+footer{text-align:center;color:#54608f;font-size:12px;margin-top:22px;line-height:1.7}
+button{cursor:pointer;font-family:inherit}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1c2a5e;border:1px solid #3b5bfd;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:90%;text-align:center}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>🔒 LOCK IT IN</h1>
+    <p class="sub">SPAIN vs ARGENTINA · WORLD CUP FINAL</p>
+    <p id="countdown" class="count"></p>
+  </header>
+
+  <section class="panel">
+    <label>Your name (goes on the card)
+      <input id="name" type="text" maxlength="20" placeholder="e.g. CK" autocomplete="off">
+    </label>
+
+    <div class="scores">
+      <div class="team">
+        <div class="flagc flag-esp"></div>
+        <div class="tname">SPAIN</div>
+        <div class="stepper">
+          <button type="button" data-t="esp" data-d="-1">−</button>
+          <span id="sEsp">2</span>
+          <button type="button" data-t="esp" data-d="1">+</button>
+        </div>
+      </div>
+      <div class="vs">–</div>
+      <div class="team">
+        <div class="flagc flag-arg"></div>
+        <div class="tname">ARGENTINA</div>
+        <div class="stepper">
+          <button type="button" data-t="arg" data-d="-1">−</button>
+          <span id="sArg">1</span>
+          <button type="button" data-t="arg" data-d="1">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pensRow" class="pens" hidden>
+      <span>Level after extra time — who lifts it on penalties?</span>
+      <div class="seg">
+        <button type="button" id="pensEsp" class="on"><i class="chipflag flag-esp"></i> Spain</button>
+        <button type="button" id="pensArg"><i class="chipflag flag-arg"></i> Argentina</button>
+      </div>
+    </div>
+
+    <label>First scorer (optional)
+      <input id="scorer" type="text" maxlength="24" placeholder="e.g. Lamine Yamal" autocomplete="off">
+    </label>
+
+    <div class="row2">
+      <label class="chk"><input type="checkbox" id="calledIt"> Post-match: “I CALLED IT” mode</label>
+      <div class="seg" id="fmt">
+        <button type="button" data-f="sq" class="on">Square</button>
+        <button type="button" data-f="st">Story</button>
+      </div>
+    </div>
+  </section>
+
+  <canvas id="card" width="1080" height="1080"></canvas>
+
+  <div class="actions">
+    <button id="dl" class="btn primary">⬇ Download card</button>
+    <button id="share" class="btn">Share…</button>
+    <button id="wa" class="btn green">Challenge friends on WhatsApp</button>
+  </div>
+
+  <footer>No login · Nothing stored · Your card, your receipt<br>Built in 15 minutes with Claude Code on a Mac mini</footer>
+</main>
+<div id="toast" hidden></div>
+<script>
+const $ = id => document.getElementById(id);
+const F = '-apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif';
+const KICKOFF = Date.parse('2026-07-19T19:00:00Z');
+const FULLTIME = KICKOFF + 135 * 60 * 1000;
+const LOCK = new Date();
+const SITE = location.protocol.startsWith('http')
+  ? location.host + location.pathname.replace(/index\.html$/, '').replace(/\/$/, '')
+  : 'chandanrepo.github.io/lockitin';
+
+const state = { esp: 2, arg: 1, pens: 'esp', fmt: 'sq' };
+const cv = $('card');
+const ctx = cv.getContext('2d');
+
+function rr(c, x, y, w, h, r) {
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+}
+
+function flag(c, x, y, w, h, team) {
+  c.save();
+  rr(c, x, y, w, h, 18);
+  c.clip();
+  if (team === 'esp') {
+    c.fillStyle = '#AA151B'; c.fillRect(x, y, w, h);
+    c.fillStyle = '#F1BF00'; c.fillRect(x, y + h * 0.25, w, h * 0.5);
+  } else {
+    c.fillStyle = '#74ACDF'; c.fillRect(x, y, w, h);
+    c.fillStyle = '#FFFFFF'; c.fillRect(x, y + h / 3, w, h / 3);
+    c.fillStyle = '#F6B40E'; c.beginPath(); c.arc(x + w / 2, y + h / 2, h * 0.11, 0, 7); c.fill();
+  }
+  c.restore();
+  c.save();
+  rr(c, x, y, w, h, 18);
+  c.strokeStyle = 'rgba(255,255,255,.25)'; c.lineWidth = 3; c.stroke();
+  c.restore();
+}
+
+function fitFont(txt, weight, start, maxW) {
+  let fs = start;
+  ctx.font = weight + ' ' + fs + 'px ' + F;
+  while (ctx.measureText(txt).width > maxW && fs > 18) {
+    fs -= 2;
+    ctx.font = weight + ' ' + fs + 'px ' + F;
+  }
+  return fs;
+}
+
+function render() {
+  const story = state.fmt === 'st';
+  const W = 1080, H = story ? 1920 : 1080;
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#0d1330'); g.addColorStop(1, '#080b1c');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const rg = ctx.createRadialGradient(W / 2, H * 0.38, 50, W / 2, H * 0.38, W * 0.75);
+  rg.addColorStop(0, 'rgba(96,120,255,0.16)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+  const lg = ctx.createRadialGradient(0, H * 0.5, 10, 0, H * 0.5, W * 0.55);
+  lg.addColorStop(0, 'rgba(198,11,30,0.13)'); lg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H);
+  const bgr = ctx.createRadialGradient(W, H * 0.5, 10, W, H * 0.5, W * 0.55);
+  bgr.addColorStop(0, 'rgba(116,172,223,0.15)'); bgr.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = bgr; ctx.fillRect(0, 0, W, H);
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  const topY = story ? 300 : 130;
+  ctx.fillStyle = '#8fa2d9';
+  ctx.font = '700 34px ' + F;
+  try { ctx.letterSpacing = '8px'; } catch (e) {}
+  ctx.fillText('WORLD CUP FINAL · JULY 19, 2026', W / 2, topY);
+  try { ctx.letterSpacing = '0px'; } catch (e) {}
+
+  const nm = ($('name').value.trim() || '').toUpperCase();
+  const nameLine = nm ? nm + (nm.endsWith('S') ? '\u2019' : '\u2019S') + ' PREDICTION' : 'MY PREDICTION';
+  ctx.fillStyle = '#ffffff';
+  fitFont(nameLine, '900', 64, W - 120);
+  ctx.fillText(nameLine, W / 2, topY + 88);
+
+  const cy = story ? H * 0.42 : H * 0.47;
+  const fw = 230, fh = 150;
+  flag(ctx, 110, cy - fh / 2, fw, fh, 'esp');
+  flag(ctx, W - 110 - fw, cy - fh / 2, fw, fh, 'arg');
+  ctx.fillStyle = '#c7d2f0';
+  ctx.font = '800 36px ' + F;
+  ctx.fillText('SPAIN', 110 + fw / 2, cy + fh / 2 + 46);
+  ctx.fillText('ARGENTINA', W - 110 - fw / 2, cy + fh / 2 + 46);
+
+  const scoreTxt = state.esp + ' \u2013 ' + state.arg;
+  ctx.fillStyle = '#ffffff';
+  fitFont(scoreTxt, '900', 185, 420);
+  ctx.fillText(scoreTxt, W / 2, cy + 4);
+
+  let yBelow = cy + fh / 2 + 46 + 74;
+  if (state.esp === state.arg) {
+    ctx.fillStyle = '#ffd76a';
+    fitFont('', '700', 40, W - 140);
+    const t = (state.pens === 'esp' ? 'SPAIN' : 'ARGENTINA') + ' LIFT IT ON PENALTIES 🏆';
+    fitFont(t, '700', 40, W - 140);
+    ctx.fillText(t, W / 2, yBelow);
+    yBelow += 64;
+  }
+  const sc = $('scorer').value.trim();
+  if (sc) {
+    ctx.fillStyle = '#9fb0dd';
+    fitFont('First scorer: ' + sc, '600', 36, W - 140);
+    ctx.fillText('First scorer: ' + sc, W / 2, yBelow);
+  }
+
+  const called = $('calledIt').checked;
+  const timeStr = LOCK.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+  let stampTxt, col;
+  if (called) { stampTxt = '✅ CALLED IT'; col = '#22c55e'; }
+  else if (LOCK.getTime() < KICKOFF) { stampTxt = '🔒 LOCKED ' + timeStr.toUpperCase() + ' · BEFORE KICKOFF'; col = '#22c55e'; }
+  else if (LOCK.getTime() < FULLTIME) { stampTxt = '🔒 LOCKED ' + timeStr.toUpperCase() + ' · MID-MATCH ENTRY'; col = '#f59e0b'; }
+  else { stampTxt = '🔒 LOCKED ' + timeStr.toUpperCase(); col = '#f59e0b'; }
+
+  const stampY = H - (story ? 430 : 290);
+  const fsz = fitFont(stampTxt, called ? '900' : '800', called ? 84 : 40, W - 170);
+  const tw = ctx.measureText(stampTxt).width;
+  const pw = tw + 90, ph = called ? 150 : 96;
+  ctx.save();
+  rr(ctx, (W - pw) / 2, stampY - ph / 2, pw, ph, ph / 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fill();
+  ctx.strokeStyle = col; ctx.lineWidth = 4; ctx.stroke();
+  ctx.restore();
+  ctx.fillStyle = col;
+  ctx.fillText(stampTxt, W / 2, stampY + 2);
+  if (called) {
+    ctx.fillStyle = '#8fa2d9';
+    ctx.font = '600 32px ' + F;
+    ctx.fillText('Prediction locked ' + timeStr, W / 2, stampY + ph / 2 + 46);
+  }
+
+  ctx.fillStyle = '#6f81b5';
+  ctx.font = '600 30px ' + F;
+  ctx.fillText(SITE + '  ·  make yours', W / 2, H - (story ? 120 : 62));
+}
+
+document.querySelectorAll('.stepper button').forEach(b => {
+  b.addEventListener('click', () => {
+    const t = b.dataset.t, d = +b.dataset.d;
+    state[t] = Math.min(9, Math.max(0, state[t] + d));
+    $('sEsp').textContent = state.esp;
+    $('sArg').textContent = state.arg;
+    syncPens();
+    render();
+  });
+});
+
+function syncPens() { $('pensRow').hidden = state.esp !== state.arg; }
+
+function segOn(a, b) { $(a).classList.add('on'); $(b).classList.remove('on'); }
+$('pensEsp').addEventListener('click', () => { state.pens = 'esp'; segOn('pensEsp', 'pensArg'); render(); });
+$('pensArg').addEventListener('click', () => { state.pens = 'arg'; segOn('pensArg', 'pensEsp'); render(); });
+
+document.querySelectorAll('#fmt button').forEach(b => b.addEventListener('click', () => {
+  state.fmt = b.dataset.f;
+  document.querySelectorAll('#fmt button').forEach(x => x.classList.toggle('on', x === b));
+  render();
+}));
+
+['name', 'scorer'].forEach(id => $(id).addEventListener('input', render));
+$('calledIt').addEventListener('change', render);
+
+function toast(t) {
+  const e = $('toast');
+  e.textContent = t;
+  e.hidden = false;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { e.hidden = true; }, 2800);
+}
+
+$('dl').addEventListener('click', () => {
+  cv.toBlob(b => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'lockitin-prediction.png';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    toast('Card saved 🔒');
+  }, 'image/png');
+});
+
+$('share').addEventListener('click', () => {
+  cv.toBlob(async b => {
+    const f = new File([b], 'lockitin.png', { type: 'image/png' });
+    const url = 'https://' + SITE + '/';
+    if (navigator.canShare && navigator.canShare({ files: [f] })) {
+      try {
+        await navigator.share({ files: [f], title: 'Lock It In', text: 'My final prediction 🔒 Make yours: ' + url });
+      } catch (e) {}
+    } else {
+      $('dl').click();
+      try {
+        await navigator.clipboard.writeText(url);
+        toast('Card downloaded + link copied — paste anywhere');
+      } catch (e) {
+        toast('Card downloaded — copy the link from the address bar');
+      }
+    }
+  }, 'image/png');
+});
+
+$('wa').addEventListener('click', () => {
+  const url = 'https://' + SITE + '/';
+  const pens = state.esp === state.arg ? ' (' + (state.pens === 'esp' ? 'ESP' : 'ARG') + ' on pens)' : '';
+  const msg = 'Final today 🏆 Spain vs Argentina. I locked ' + state.esp + '\u2013' + state.arg + pens +
+    '. Lock yours before kickoff — takes 10 sec and you get a timestamped card so nobody can lie later 😂 ' + url;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+});
+
+function tick() {
+  const n = Date.now();
+  const el = $('countdown');
+  if (n < KICKOFF) {
+    const s = Math.floor((KICKOFF - n) / 1000);
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60);
+    el.textContent = '⏳ Kickoff in ' + h + 'h ' + String(m).padStart(2, '0') + 'm — lock it before then';
+  } else if (n < FULLTIME) {
+    el.textContent = '🔴 Match is LIVE — late entries get stamped 😅';
+  } else {
+    el.textContent = '🏁 Full time — did you call it? Flip on “I CALLED IT” mode';
+  }
+}
+setInterval(tick, 1000);
+tick();
+syncPens();
+render();
+</script>
+</body>
+</html>
